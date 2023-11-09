@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'annonce.dart';
 import 'annonceDataBase.dart';
 import 'annonceView.dart';
-import 'annonceForm.dart'; // Importez votre classe de formulaire
+import 'annonceForm.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListAnnonce extends StatefulWidget {

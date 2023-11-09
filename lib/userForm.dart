@@ -3,7 +3,7 @@ import 'user.dart';
 import 'userDataBase.dart';
 
 class UserForm extends StatefulWidget {
-  final User? user; // User à modifier, null pour un nouveau user
+  final User? user;
 
   UserForm({Key? key, this.user}) : super(key: key);
 

@@ -1,10 +1,8 @@
 import 'package:coursun/user.dart';
 import 'package:coursun/userView.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
 import 'userDataBase.dart';
-import 'userView.dart';
-import 'userForm.dart'; // Importez votre classe de formulaire
+import 'userForm.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class UserList extends StatefulWidget {

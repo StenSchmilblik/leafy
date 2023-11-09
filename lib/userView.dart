@@ -1,8 +1,5 @@
 import 'package:coursun/user.dart';
-
-import 'annonce.dart';
 import 'package:flutter/material.dart';
-import 'favoriteWidget.dart';
 import 'contactWidget.dart';
 
 class UserView extends StatelessWidget {

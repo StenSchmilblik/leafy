@@ -39,16 +39,14 @@ class ConversationList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Liste des Conversations'),
+        title: const Text('Liste des Conversations'),
       ),
       body: ListView.builder(
         itemCount: conversations.length,
         itemBuilder: (context, index) {
           final conversation = conversations[index];
           return ListTile(
-            leading: CircleAvatar(
-              // Utilisez les données de votre modèle Conversation ici
-              // Par exemple, conversation.contactName
+            leading: const CircleAvatar(
             ),
             title: Text(conversation.contactName),
             subtitle: Text(conversation.lastMessage),

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'user.dart';
-import 'userList.dart';
-import 'user.dart' as UserClass;
 
 
 class UserDataBase {
