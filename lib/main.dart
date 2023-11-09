@@ -1,9 +1,11 @@
+import 'package:coursun/userList.dart';
 import 'package:flutter/material.dart';
 import 'annonceList.dart';
 import 'annonceForm.dart';
 import 'annonceDataBase.dart';
-import 'myAccount.dart';
-
+import 'conversationList.dart';
+import 'listAnnonce.dart';
+import 'msgList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +14,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -21,8 +23,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final List<Widget> pages = [
     const AnnonceList(),
-    const AnnonceForm(),
-    MyAccount(),
+    ConversationList(),
+    // const ListAnnonce(),
+    const UserList(),
   ];
 
   int currentPageIndex = 0;
@@ -52,9 +55,12 @@ class _MyAppState extends State<MyApp> {
               label: 'Annonces',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_box),
-              label: 'Ajouter',
+              icon: Icon(Icons.local_post_office),
+              label: 'Messages',
             ),
+           // BottomNavigationBarItem(
+           //   icon: Icon(Icons.list),
+           //   label: 'List',),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Compte',

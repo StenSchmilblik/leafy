@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'annonce.dart'; // Assurez-vous d'importer la classe Annonce
+import 'annonce.dart';
 import 'annonceDataBase.dart';
 
-
-
 class AnnonceForm extends StatefulWidget {
-  const AnnonceForm({Key? key}) : super(key: key);
+  final Annonce? annonce; // Annonce à modifier, null pour une nouvelle annonce
+
+  AnnonceForm({Key? key, this.annonce}) : super(key: key);
 
   @override
   State<AnnonceForm> createState() => _AnnonceFormState();
@@ -13,29 +13,42 @@ class AnnonceForm extends StatefulWidget {
 
 class _AnnonceFormState extends State<AnnonceForm> {
   final formKey = GlobalKey<FormState>();
-  final idController = TextEditingController();
   final titleController = TextEditingController();
   final plantTypeController = TextEditingController();
   final userController = TextEditingController();
   final userImageUrlController = TextEditingController();
   final userAddressController = TextEditingController();
   final imageUrlController = TextEditingController();
-      //"https://cdn.wamiz.fr/cdn-cgi/image/format=auto,quality=80,width=1200,height=1200,fit=cover/article/main-picture/chat-colere-agressif-6494418aadc72.jpg";
   final descriptionController = TextEditingController();
   final riskLvlController = TextEditingController();
-      //"Hard";
   final maintainLvlController = TextEditingController();
-      //"Medium";
   final wateringLvlController = TextEditingController();
-      //"Izi";
   final isFavoriteController = TextEditingController();
   final favoriteCountController = TextEditingController();
-  //40;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.annonce != null) {
+      // Si une annonce est passée en paramètre, pré-remplir les champs avec ses données
+      final annonce = widget.annonce!;
+      titleController.text = annonce.title;
+      plantTypeController.text = annonce.plantType;
+      userController.text = annonce.user;
+      userImageUrlController.text = annonce.userImageUrl;
+      userAddressController.text = annonce.userAddress;
+      imageUrlController.text = annonce.imageUrl;
+      descriptionController.text = annonce.description;
+      riskLvlController.text = annonce.riskLvl;
+      maintainLvlController.text = annonce.maintainLvl;
+      wateringLvlController.text = annonce.wateringLvl;
+      isFavoriteController.text = annonce.isFavorite.toString();
+      favoriteCountController.text = annonce.favoriteCount.toString();
+    }
+  }
 
   @override
   void dispose() {
-    idController.dispose();
     titleController.dispose();
     plantTypeController.dispose();
     userController.dispose();
@@ -48,7 +61,6 @@ class _AnnonceFormState extends State<AnnonceForm> {
     wateringLvlController.dispose();
     isFavoriteController.dispose();
     favoriteCountController.dispose();
-
     super.dispose();
   }
 
@@ -56,291 +68,197 @@ class _AnnonceFormState extends State<AnnonceForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Nouvelle annonce"),
+        title: widget.annonce == null
+            ? const Text("Nouvelle annonce")
+            : const Text("Modifier l'annonce"),
       ),
       body: Form(
         key: formKey,
         child: ListView(
+          padding: const EdgeInsets.all(16.0),
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: titleController,
-                decoration: InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'Title',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: plantTypeController,
-                decoration: InputDecoration(
-                  labelText: 'Plant Type',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: plantTypeController,
+              decoration: const InputDecoration(
+                labelText: 'Plant Type',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                keyboardType: TextInputType.multiline,
-                minLines: 1,
-                maxLines: 15,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: userController,
+              decoration: const InputDecoration(
+                labelText: 'Username',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: idController,
-                decoration: InputDecoration(
-                  labelText: 'Id numerique',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: userImageUrlController,
+              decoration: const InputDecoration(
+                labelText: 'User photo URL',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: userController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: userAddressController,
+              decoration: const InputDecoration(
+                labelText: 'User Address',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: userAddressController,
-                decoration: InputDecoration(
-                  labelText: 'Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: imageUrlController,
+              decoration: const InputDecoration(
+                labelText: 'Image URL',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: userImageUrlController,
-                decoration: InputDecoration(
-                  labelText: 'User photo url',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                labelText: 'Description',
               ),
+              maxLines: 3,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-
-
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: imageUrlController,
-                decoration: InputDecoration(
-                  labelText: 'Image url',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: riskLvlController,
+              decoration: const InputDecoration(
+                labelText: 'Risk Level',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: riskLvlController,
-                decoration: InputDecoration(
-                  labelText: 'Risk',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: maintainLvlController,
+              decoration: const InputDecoration(
+                labelText: 'Maintenance Level',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: maintainLvlController,
-                decoration: InputDecoration(
-                  labelText: 'Entretien',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: wateringLvlController,
+              decoration: const InputDecoration(
+                labelText: 'Watering Level',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: wateringLvlController,
-                decoration: InputDecoration(
-                  labelText: 'Arrosage',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: isFavoriteController,
+              decoration: const InputDecoration(
+                labelText: 'Is Favorite (true or false)',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                if (value.toLowerCase() != 'true' && value.toLowerCase() != 'false') {
+                  return 'Valeur invalide (true ou false)';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: isFavoriteController,
-                decoration: InputDecoration(
-                  labelText: 'Fav ? : true or false',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
-                  }
-                  return null;
-                },
+            TextFormField(
+              controller: favoriteCountController,
+              decoration: const InputDecoration(
+                labelText: 'Favorite Count',
               ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Champ obligatoire';
+                }
+                if (int.tryParse(value) == null) {
+                  return 'Valeur invalide (nombre entier)';
+                }
+                return null;
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 16.0, left: 16.0, right: 16.0, bottom: 8.0),
-              child: TextFormField(
-                controller: favoriteCountController,
-                decoration: InputDecoration(
-                  labelText: 'Cb de fan ?',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Renseigne le champ wesh';
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  final newAnnonce = Annonce(
+                    widget.annonce?.id ?? 0, // Utilisez l'ID existant ou 0 pour une nouvelle annonce
+                    titleController.text,
+                    plantTypeController.text,
+                    userController.text,
+                    userImageUrlController.text,
+                    userAddressController.text,
+                    imageUrlController.text,
+                    descriptionController.text,
+                    riskLvlController.text,
+                    maintainLvlController.text,
+                    wateringLvlController.text,
+                    isFavoriteController.text.toLowerCase() == 'true',
+                    int.parse(favoriteCountController.text),
+                  );
+                  if (widget.annonce == null) {
+                    // Si c'est une nouvelle annonce, insérez-la dans la base de données
+                    AnnonceDataBase.instance.insertAnnonce(newAnnonce);
+                  } else {
+                    // Si c'est une modification, mettez à jour l'annonce dans la base de données
+                    AnnonceDataBase.instance.updateAnnonce(newAnnonce);
                   }
-                  return null;
-                },
-              ),
-            ),
-            SizedBox(height: 8.0),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    Annonce annonce = Annonce(
-                        int.parse(idController.text),
-                        titleController.text,
-                        plantTypeController.text,
-                        userController.text,
-                        userImageUrlController.text,
-                        userAddressController.text,
-                        imageUrlController.text, //imgurl
-                        descriptionController.text,
-                        riskLvlController.text, //risk
-                        maintainLvlController.text, //maintain
-                        wateringLvlController.text, // arrosage
-                        false,
-                        1);
-                    AnnonceDataBase.instance.insertAnnonce(annonce);
-                    print("Annonce ajoutée à la base de données : $annonce");
-                    Navigator.pop(context);
-                  }
-                },
-                child: Text('Valider'),
-              ),
+                  Navigator.pop(context, true); // Revenir à la liste des annonces
+                }
+              },
+              child: const Text('Valider'),
             ),
           ],
         ),

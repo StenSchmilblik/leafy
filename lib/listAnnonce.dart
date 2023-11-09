@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'annonce.dart';
 import 'annonceDataBase.dart';
 import 'annonceView.dart';
+import 'annonceForm.dart'; // Importez votre classe de formulaire
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'annonceForm.dart';
 
-class MyAccount extends StatefulWidget {
+class ListAnnonce extends StatefulWidget {
+  const ListAnnonce({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
-    return MyAccountState();
+    return ListAnnonceState();
   }
 }
 
-class MyAccountState extends State<MyAccount> {
+class ListAnnonceState extends State<ListAnnonce> {
   List<Annonce> annonces = [];
 
   @override
@@ -36,14 +38,14 @@ class MyAccountState extends State<MyAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Liste des Annonces"),
+        title: const Text("Liste des Annonces"),
       ),
       body: ListView.builder(
         itemCount: annonces.length,
         itemBuilder: (context, index) {
           final annonce = annonces[index];
           return Slidable(
-            actionPane: SlidableDrawerActionPane(),
+            actionPane: const SlidableDrawerActionPane(),
             actionExtentRatio: 0.25,
             secondaryActions: [
               IconSlideAction(
@@ -57,7 +59,7 @@ class MyAccountState extends State<MyAccount> {
                     annonces.removeAt(index);
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text("Annonce supprimée"),
                     ),
                   );
@@ -74,7 +76,7 @@ class MyAccountState extends State<MyAccount> {
                 );
               },
               child: Card(
-                margin: EdgeInsets.all(6),
+                margin: const EdgeInsets.all(6),
                 elevation: 1,
                 child: Row(
                   children: [
@@ -94,7 +96,7 @@ class MyAccountState extends State<MyAccount> {
                           padding: const EdgeInsets.only(bottom: 8, left: 8),
                           child: Text(
                             annonce.title,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
@@ -103,8 +105,7 @@ class MyAccountState extends State<MyAccount> {
                         Container(
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            'Par ${
-                                annonce.user}',
+                            'Par ${annonce.user}',
                             style: TextStyle(
                               color: Colors.grey[500],
                               fontSize: 16,
@@ -119,6 +120,21 @@ class MyAccountState extends State<MyAccount> {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AnnonceForm(),
+            ),
+          ).then((shouldRefresh) {
+            if (shouldRefresh == true) {
+              loadAnnonces();
+            }
+          });
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
